@@ -1,0 +1,13 @@
+/*
+  Warnings:
+
+  - The `role` column on the `User` table would be dropped and recreated. This will lead to data loss if there is data in the column.
+
+*/
+-- CreateEnum
+CREATE TYPE "ROLE" AS ENUM ('ADMIN', 'RECRUITER', 'CANDIDATE');
+
+-- AlterTable
+ALTER TABLE "User" DROP COLUMN "role",
+ADD COLUMN     "role" "ROLE" NOT NULL DEFAULT 'CANDIDATE',
+ALTER COLUMN "status" SET DEFAULT true;

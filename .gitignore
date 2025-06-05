@@ -1,3 +1,20 @@
+# Ignore node dependencies
 node_modules/
-dist/
+
+# Ignore environment files
 .env
+
+# Ignore prisma generated client code
+generated/
+
+# Ignore compiled code if you use build step
+dist/
+build/
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
+
+# Optional: IDE specific files
+.vscode/
+.idea/

@@ -1,0 +1,321 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  name String?
+  email String @unique
+  password String
+  role ROLE @default(CANDIDATE)
+  status Boolean @default(true)
+
+  candidateProfile CandidateProfile?
+  companies Company[]
+  jobs    Job[]
+
+  packages RecruitersPackage[]
+  orders Order[]
+}
+
+model CandidateProfile {
+  id           Int      @id @default(autoincrement())
+  fullName     String
+  gender       Gender
+  phone        String
+  cv           String
+  birthdate    DateTime
+  address      String
+  openToWork   Boolean   @default(false)
+  status       Boolean   @default(true)
+
+  // Foreign key and relation to User
+  user         User      @relation(fields: [userId], references: [id])
+  userId       Int       @unique
+
+  languages    CandidateLanguage[] // 1:N relation to junction table
+
+  candidateEducations CandidateEducation[] 
+
+  candidateSkills CandidateSkill[]
+
+  experiences Experience[]
+
+  applies Apply[]
+}
+
+model Language {
+  name String @id
+  candidates   CandidateLanguage[] // 1:N relation to junction table
+}
+
+model CandidateLanguage {
+  candidateProfile   CandidateProfile @relation(fields: [candidateProfileId], references: [id])
+  candidateProfileId Int
+
+  language           Language         @relation(fields: [languageName], references: [name])
+  languageName       String
+
+  level Level @default(BASIC)
+
+  @@unique([candidateProfileId, languageName])
+}
+
+model Education {
+  id Int @id @default(autoincrement())
+  name String
+  map String
+
+  candidateEducations CandidateEducation[]
+}
+
+model CandidateEducation {
+  candidateProfile   CandidateProfile @relation(fields: [candidateProfileId], references: [id])
+  candidateProfileId Int
+
+  education   Education @relation(fields: [educationId], references: [id])
+  educationId Int
+
+  major String
+  degree Degree @default(BACHELOR)
+  yearStart Int
+  yearEnd Int
+
+  @@id([candidateProfileId, educationId])
+}
+
+model Skill {
+  name String @id
+  candidateSkills CandidateSkill[]
+  jobSkills JobSkill[]
+}
+
+model CandidateSkill {
+  candidateProfile   CandidateProfile @relation(fields: [candidateProfileId], references: [id])
+  candidateProfileId Int
+
+  skill              Skill @relation(fields: [skillName], references: [name])
+  skillName          String
+
+  @@id([candidateProfileId, skillName])
+}
+
+model Experience {
+  id                 Int              @id @default(autoincrement())
+  company            String
+  jobTitle           String
+  location           String
+  startDate          DateTime
+  endDate            DateTime?
+  description        String?
+
+  candidateProfile   CandidateProfile @relation(fields: [candidateProfileId], references: [id])
+  candidateProfileId Int
+}
+
+model Company {
+  id                  Int      @id @default(autoincrement())
+  name                String
+  description         String
+  teamSize            Int      @default(50)
+  establishmentDate   DateTime @db.Date
+  views               Int      @default(0)
+  websiteUrl          String?
+  isApproved          Boolean  @default(false)
+  mapLink             String?
+  address             String?
+
+  user                User     @relation(fields: [userId], references: [id])
+  userId              Int
+
+  images CompanyImage[]
+  industries       CompanyIndustry[]
+  jobs   Job[]
+}
+
+model CompanyImage {
+  id         Int   @id @default(autoincrement())
+  url        String
+  companyId  Int
+  company    Company  @relation(fields: [companyId], references: [id])
+}
+
+model Industry {
+  name   String   @id
+  companies        CompanyIndustry[]
+}
+
+model CompanyIndustry {
+  companyId     Int
+  industryName  String
+
+  company       Company  @relation(fields: [companyId], references: [id])
+  industry      Industry @relation(fields: [industryName], references: [name])
+
+  @@id([companyId, industryName])
+}
+
+model JobRole {
+  name String @id
+
+  jobs Job[]
+}
+
+model Job {
+  id          Int      @id @default(autoincrement())
+  companyId   Int
+  company     Company  @relation(fields: [companyId], references: [id])
+
+  postById    Int
+  postBy      User     @relation(fields: [postById], references: [id])
+
+  jobRole     JobRole  @relation(fields: [jobRoleName], references: [name])
+  jobRoleName String 
+
+  title       String
+  description String
+  status      JobStatus @default(PENDING)
+  minSalary   Float
+  maxSalary   Float?
+  totalViews  Int      @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  isDeleted   Boolean  @default(false)
+
+  jobSkills JobSkill[]
+
+  jobBenefits JobBenefit[]
+
+  applies Apply[]
+}
+
+model JobSkill {
+  job Job @relation(fields: [jobId], references: [id])
+  jobId Int
+
+  skill Skill @relation(fields: [skillName], references: [name])
+  skillName String
+
+  @@id([jobId, skillName])
+}
+
+model Benefit {
+  name String @id
+
+  jobBenefits JobBenefit[]
+}
+
+model JobBenefit {
+  job Job @relation(fields: [jobId], references: [id])
+  jobId Int
+
+  benefit Benefit @relation(fields: [benefitName], references: [name])
+  benefitName String
+
+  @@id([jobId, benefitName])
+}
+
+model Apply {
+  candidateProfile CandidateProfile @relation(fields: [candidateProfileId], references: [id])
+  candidateProfileId Int
+
+  job Job @relation(fields: [jobId], references: [id])
+  jobId Int
+
+  applyDate DateTime @default(now())
+  status ApplyStatus @default(PENDING)
+
+  @@id([candidateProfileId, jobId])
+}
+
+model Package {
+  id            Int     @id @default(autoincrement())
+  label         String
+  price         Float
+  jobPostLimit  Int
+  isActive Boolean @default(true)
+
+  packages RecruitersPackage[]
+  orders Order[]
+}
+
+model RecruitersPackage {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  packageId  Int
+  startDate  DateTime
+  endDate    DateTime
+
+  user       User     @relation(fields: [userId], references: [id])
+  package    Package  @relation(fields: [packageId], references: [id])
+}
+
+model Order {
+  id           Int       @id @default(autoincrement())
+
+  recruiter    User      @relation(fields: [recruiterId], references: [id])
+  recruiterId  Int
+
+  package      Package   @relation(fields: [packageId], references: [id])
+  packageId    Int
+
+  totalPrice   Float     @default(0)
+  status       OrderStatus @default(PENDING)
+  orderDate    DateTime  @db.Date @default(now())
+}
+
+enum OrderStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum ApplyStatus {
+  PENDING
+  VIEWED
+  APPROVED
+}
+
+enum JobStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CLOSED
+}
+
+enum Degree {
+  BACHELOR
+  MASTER
+  ENGINEER
+}
+
+enum Level {
+  NATIVE
+  FLUENT
+  BASIC
+}
+
+enum ROLE {
+  ADMIN
+  RECRUITER
+  CANDIDATE
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
