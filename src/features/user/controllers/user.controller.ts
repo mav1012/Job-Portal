@@ -43,7 +43,7 @@ class UserController {
   }
 
   public async update(req: Request, res: Response) {
-    const user = await userService.update(parseInt(req.params.id), req.body.name, req.currentUser)
+    const user = await userService.update(parseInt(req.params.id), req.body.name, req.currentUser!)
 
     res.status(200).json({
       message: 'Update user',
@@ -52,7 +52,7 @@ class UserController {
   }
 
   public async updatePassword(req: Request, res: Response) {
-    const user = await userService.updatePassword(parseInt(req.params.id), req.body.password, req.currentUser)
+    const user = await userService.updatePassword(parseInt(req.params.id), req.body.password, req.currentUser!)
 
     res.status(200).json({
       message: 'Update user password'

@@ -4,7 +4,7 @@ import { Request, Response } from 'express'
 
 class RecruiterPackageController {
   public async create(req: Request, res: Response) {
-    const packageEntity = await recruiterPackageService.create(req.body.packageId, req.currentUser)
+    const packageEntity = await recruiterPackageService.create(req.body.packageId, req.currentUser!)
 
     return res.status(HTTP_STATUS.CREATED).json({
       message: 'Create package successfully',
