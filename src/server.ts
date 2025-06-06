@@ -17,7 +17,7 @@ class Server {
     this.setupRoutes()
     this.setupErrorHandling()
     this.listenServer()
-    this.syncRedisToPostgres()
+    // this.syncRedisToPostgres()
   }
 
   private setupMiddleware(): void {
@@ -51,11 +51,11 @@ class Server {
     })
   }
 
-  private syncRedisToPostgres(): void {
-    cron.schedule('0 * * * *', async () => {
-      syncData()
-    })
-  }
+  // private syncRedisToPostgres(): void {
+  //   cron.schedule('0 * * * *', async () => {
+  //     syncData()
+  //   })
+  // }
 
   private listenServer() {
     const port = process.env.PORT || 3000
