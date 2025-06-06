@@ -4,7 +4,7 @@ import HTTP_STATUS from '~/globals/constants/http.constant'
 
 class IndustryController {
   public async create(req: Request, res: Response) {
-    const companyIndustry = await industryService.create(parseInt(req.params.id), req.body.name, req.currentUser)
+    const companyIndustry = await industryService.create(parseInt(req.params.id), req.body.name, req.currentUser!)
 
     return res.status(HTTP_STATUS.CREATED).json({
       message: 'Create company industry successfully',
@@ -22,7 +22,7 @@ class IndustryController {
   }
 
   public async remove(req: Request, res: Response) {
-    await industryService.remove(parseInt(req.params.id), req.body.name, req.currentUser)
+    await industryService.remove(parseInt(req.params.id), req.body.name, req.currentUser!)
 
     return res.status(HTTP_STATUS.OK).json({
       message: 'Delete company industry successfully'

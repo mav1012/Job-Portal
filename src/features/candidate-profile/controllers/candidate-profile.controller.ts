@@ -6,7 +6,7 @@ import { ICandidateProfile } from '../interfaces/candidate-profile.interface'
 
 class CandidateProfileController {
   public async create(req: Request, res: Response) {
-    const profile: ICandidateProfile = await candidateProfileService.create(req.body, req.currentUser)
+    const profile: ICandidateProfile = await candidateProfileService.create(req.body, req.currentUser!)
 
     return res.status(HTTP_STATUS.CREATED).json({
       message: 'Create profile successfully',
@@ -52,7 +52,7 @@ class CandidateProfileController {
   }
 
   public async toggleOpenToWork(req: Request, res: Response) {
-    const userId = req.currentUser.id
+    const userId = req.currentUser!.id
 
     const updatedProfile = await candidateProfileService.toggleOpenToWork(userId)
 

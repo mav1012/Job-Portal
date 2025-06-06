@@ -4,7 +4,7 @@ import HTTP_STATUS from '~/globals/constants/http.constant'
 
 class JobBenefitController {
   public async create(req: Request, res: Response) {
-    const jobBenefit = await jobBenefitService.create(req.body.jobId, req.body.benefitName, req.currentUser)
+    const jobBenefit = await jobBenefitService.create(req.body.jobId, req.body.benefitName, req.currentUser!)
 
     return res.status(HTTP_STATUS.CREATED).json({
       message: 'Create job benefit successfully',
@@ -22,7 +22,7 @@ class JobBenefitController {
   }
 
   public async remove(req: Request, res: Response) {
-    await jobBenefitService.remove(parseInt(req.params.jobId), req.params.benefitName, req.currentUser)
+    await jobBenefitService.remove(parseInt(req.params.jobId), req.params.benefitName, req.currentUser!)
 
     return res.status(HTTP_STATUS.OK).json({
       message: 'Delete job benefit successfully'

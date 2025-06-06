@@ -4,7 +4,7 @@ import HTTP_STATUS from '~/globals/constants/http.constant'
 
 class CandidateEducationController {
   public async create(req: Request, res: Response) {
-    const candidateEducation = await candidateEducationService.create(req.body, req.currentUser)
+    const candidateEducation = await candidateEducationService.create(req.body, req.currentUser!)
 
     return res.status(200).json({
       message: 'Create candidate education successfully',
@@ -22,7 +22,7 @@ class CandidateEducationController {
   }
 
   public async readMyEducations(req: Request, res: Response) {
-    const candidateEducations = await candidateEducationService.readMyEducations(req.currentUser)
+    const candidateEducations = await candidateEducationService.readMyEducations(req.currentUser!)
 
     return res.status(200).json({
       message: 'Get my candidate educations successfully',
@@ -34,7 +34,7 @@ class CandidateEducationController {
     const educationId = parseInt(req.params.educationId)
     const updateData = req.body
 
-    const updated = await candidateEducationService.update(educationId, updateData, req.currentUser)
+    const updated = await candidateEducationService.update(educationId, updateData, req.currentUser!)
 
     return res.status(HTTP_STATUS.OK).json({
       message: 'Education updated successfully',
@@ -45,7 +45,7 @@ class CandidateEducationController {
   public async delete(req: Request, res: Response) {
     const educationId = parseInt(req.params.id)
 
-    const deleted = await candidateEducationService.delete(educationId, req.currentUser)
+    const deleted = await candidateEducationService.delete(educationId, req.currentUser!)
 
     return res.status(200).json({
       message: 'Education deleted successfully',

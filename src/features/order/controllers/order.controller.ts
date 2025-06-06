@@ -13,7 +13,7 @@ class OrderController {
   }
 
   public async readMyOrders(req: Request, res: Response) {
-    const orders = await orderService.readMyOrders(req.currentUser)
+    const orders = await orderService.readMyOrders(req.currentUser!)
 
     return res.status(HTTP_STATUS.OK).json({
       message: 'Get orders successfully',

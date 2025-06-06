@@ -5,7 +5,7 @@ class CandidateSkillController {
   public async addSkill(req: Request, res: Response) {
     const { skillName } = req.body
 
-    const result = await candidateSkillService.addSkillToCandidate(skillName, req.currentUser)
+    const result = await candidateSkillService.addSkillToCandidate(skillName, req.currentUser!)
 
     return res.status(201).json({
       message: 'Skill added to candidate successfully',
@@ -14,7 +14,7 @@ class CandidateSkillController {
   }
 
   public async getMySkills(req: Request, res: Response) {
-    const skills = await candidateSkillService.getSkillsByCandidateId(req.currentUser)
+    const skills = await candidateSkillService.getSkillsByCandidateId(req.currentUser!)
 
     return res.status(200).json({
       message: 'Skills fetched successfully',
@@ -25,7 +25,7 @@ class CandidateSkillController {
   public async removeSkill(req: Request, res: Response) {
     const { skill } = req.body
 
-    await candidateSkillService.deleteSkill(skill, req.currentUser)
+    await candidateSkillService.deleteSkill(skill, req.currentUser!)
 
     return res.status(200).json({
       message: `${skill} removed successfully from your skills.`

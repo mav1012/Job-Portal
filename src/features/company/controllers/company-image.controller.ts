@@ -7,7 +7,7 @@ class CompanyImageController {
     const companyId = parseInt(req.params.companyId)
     const files = req.files as Express.Multer.File[]
 
-    const result = await companyImageService.add(companyId, req.currentUser, files)
+    const result = await companyImageService.add(companyId, req.currentUser!, files)
 
     return res.status(201).json({
       message: 'Company image added successfully',
@@ -29,7 +29,7 @@ class CompanyImageController {
   public async remove(req: Request, res: Response) {
     await companyImageService.remove(
       parseInt(req.params.companyId),
-      req.currentUser,
+      req.currentUser!,
       parseInt(req.params.companyImageId)
     )
 

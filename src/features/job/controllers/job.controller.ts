@@ -4,7 +4,7 @@ import { Request, Response } from 'express'
 
 class JobController {
   public async create(req: Request, res: Response) {
-    const job = await jobService.create(req.body, req.currentUser)
+    const job = await jobService.create(req.body, req.currentUser!)
 
     return res.status(HTTP_STATUS.CREATED).json({
       message: 'Create job successfully',
@@ -51,7 +51,7 @@ class JobController {
     const job = await jobService.update(
       parseInt(req.params.id),
       parseInt(req.params.companyid),
-      req.currentUser,
+      req.currentUser!,
       req.body
     )
 
@@ -65,7 +65,7 @@ class JobController {
     const job = await jobService.updateStatus(
       parseInt(req.params.id),
       parseInt(req.params.companyid),
-      req.currentUser,
+      req.currentUser!,
       req.body.status
     )
 
@@ -76,7 +76,7 @@ class JobController {
   }
 
   public async remove(req: Request, res: Response) {
-    await jobService.remove(parseInt(req.params.id), parseInt(req.params.companyid), req.currentUser)
+    await jobService.remove(parseInt(req.params.id), parseInt(req.params.companyid), req.currentUser!)
 
     return res.status(HTTP_STATUS.OK).json({
       message: 'Delete job successfully'

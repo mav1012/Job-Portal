@@ -4,7 +4,7 @@ import { Request, Response } from 'express'
 
 class ApplyController {
   public async create(req: Request, res: Response) {
-    const apply = await applyService.create(req.body, req.currentUser)
+    const apply = await applyService.create(req.body, req.currentUser!)
 
     return res.status(HTTP_STATUS.CREATED).json({
       message: 'Create apply successfully',
@@ -20,7 +20,7 @@ class ApplyController {
         page: parseInt(page as string),
         limit: parseInt(limit as string)
       },
-      req.currentUser
+      req.currentUser!
     )
 
     return res.status(HTTP_STATUS.OK).json({
@@ -42,7 +42,7 @@ class ApplyController {
         limit: parseInt(limit as string)
       },
       parseInt(req.params.id),
-      req.currentUser
+      req.currentUser!
     )
 
     return res.status(HTTP_STATUS.OK).json({
@@ -56,7 +56,7 @@ class ApplyController {
   }
 
   public async updateStatus(req: Request, res: Response) {
-    const apply = await applyService.updateStatus(req.body, req.currentUser)
+    const apply = await applyService.updateStatus(req.body, req.currentUser!)
 
     return res.status(HTTP_STATUS.OK).json({
       message: 'Update apply status successfully',

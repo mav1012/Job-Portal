@@ -5,7 +5,7 @@ import { candidateCompanyService } from '../services/candidate-company.service'
 
 class CandidateCompanyController {
   public async create(req: Request, res: Response) {
-    const userId = req.currentUser.id
+    const userId = req.currentUser!.id
 
     const company = await candidateCompanyService.createCompany(req.body, userId)
 
@@ -42,7 +42,7 @@ class CandidateCompanyController {
 
   public async readOne(req: Request, res: Response) {
     const id = parseInt(req.params.id)
-    const company = await candidateCompanyService.readOne(id)
+    const company = await candidateCompanyService.readOne(id, req.currentUser!.id)
 
     res.status(HTTP_STATUS.OK).json({
       message: 'Fetched company',
@@ -51,7 +51,7 @@ class CandidateCompanyController {
   }
 
   public async readMyCompanies(req: Request, res: Response) {
-    const userId = req.currentUser.id
+    const userId = req.currentUser!.id
     const companies = await candidateCompanyService.readByUserId(userId)
 
     res.status(HTTP_STATUS.OK).json({

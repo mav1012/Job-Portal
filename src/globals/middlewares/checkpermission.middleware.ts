@@ -4,8 +4,8 @@ import { ForbiddenException } from '../cores/error.core'
 
 export function checkPermission(model: any, foreignField: string) {
   return async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.currentUser.id
-    const userRole = req.currentUser.role
+    const userId = req.currentUser!.id
+    const userRole = req.currentUser!.role
     const entityId = parseInt(req.params.id)
 
     try {

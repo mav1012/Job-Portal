@@ -3,7 +3,7 @@ import { candidateLanguageService } from '../services/candidate-language.service
 
 class CandidateLanguageController {
   public async create(req: Request, res: Response) {
-    const candidateLanguage = await candidateLanguageService.create(req.body, req.currentUser)
+    const candidateLanguage = await candidateLanguageService.create(req.body, req.currentUser!)
 
     return res.status(200).json({
       message: 'Create candidate language successfully',
@@ -21,7 +21,7 @@ class CandidateLanguageController {
   }
 
   public async readMyLanguages(req: Request, res: Response) {
-    const candidateLanguages = await candidateLanguageService.readMyLanguages(req.currentUser)
+    const candidateLanguages = await candidateLanguageService.readMyLanguages(req.currentUser!)
 
     return res.status(200).json({
       message: 'Get my candidate languages successfully',
@@ -31,7 +31,7 @@ class CandidateLanguageController {
 
   public async updateLevel(req: Request, res: Response) {
     const candidateLanguage = await candidateLanguageService.updateLevel(
-      req.currentUser,
+      req.currentUser!,
       req.params.languageName,
       req.body.level
     )
@@ -43,7 +43,7 @@ class CandidateLanguageController {
   }
 
   public async remove(req: Request, res: Response) {
-    await candidateLanguageService.remove(req.currentUser, req.params.languageName)
+    await candidateLanguageService.remove(req.currentUser!, req.params.languageName)
 
     return res.status(200).json({
       message: 'Delete candidate language successfully'

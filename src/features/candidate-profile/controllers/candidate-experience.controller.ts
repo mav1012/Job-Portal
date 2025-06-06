@@ -4,7 +4,7 @@ import { NotFoundException } from '~/globals/cores/error.core'
 
 class CandidateExperienceController {
   public async create(req: Request, res: Response) {
-    const experience = await candidateExperienceService.create(req.currentUser, req.body)
+    const experience = await candidateExperienceService.create(req.currentUser!, req.body)
 
     return res.status(201).json({
       message: 'Experience added successfully',
@@ -13,7 +13,7 @@ class CandidateExperienceController {
   }
 
   public async getMyExperiences(req: Request, res: Response) {
-    const experiences = await candidateExperienceService.getMyExperiences(req.currentUser)
+    const experiences = await candidateExperienceService.getMyExperiences(req.currentUser!)
 
     res.status(200).json({
       message: 'Experiences fetched successfully',
